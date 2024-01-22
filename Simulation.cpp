@@ -36,7 +36,19 @@ boost::property_tree::ptree Probe::GetJson()
 	children.push_back(std::make_pair("", pt));
 
 	return children;
-} 
+}  
+string Probe::GetJson2(int base_indent)
+{
+#define SPACING(x) std::string( (base_indent+x)*2, ' ')
+	 
+	stringstream ss;
+	ss << SPACING(0) << "[\n";
+	ss << SPACING(1) << "\"" << time << "\",\n";
+	ss << SPACING(1) << "\"" << gateName << "\",\n";
+	ss << SPACING(1) << "\"" << newValue << "\"\n";
+	ss << SPACING(0) << "]";
+	return ss.str();
+}
 
 void Simulation::AddTransition(std::string gateName, int outputValue, int outputTime)
 {
@@ -238,6 +250,27 @@ boost::property_tree::ptree Simulation::GetJson()
 	pt.add_child("trace", probes); 
 	pt.add("layout", m_layout);
 	return pt;
+} 
+
+std::string Simulation::GetJson2(int base_indent)
+{
+#define SPACING(x) std::string( (base_indent+x)*2, ' ')
+
+	std::stringstream ss;
+	ss << m_circuit->GetJson2(base_indent);
+  
+	ss << SPACING(0) << "\"trace\": [\n";
+	int count = 0;
+	for (auto& p : m_probes)
+	{
+		ss << p.GetJson2(base_indent + 1); 
+		if (++count << m_probes.size())
+			ss << ",\n";
+		else
+			ss << "\n";
+	}
+	ss << SPACING(0) << "]\n";
+	return ss.str();
 }
 
 void Simulation::PrintProbes(std::ostream& os)

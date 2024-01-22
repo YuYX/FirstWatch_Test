@@ -111,3 +111,57 @@ boost::property_tree::ptree Circuit::GetJson()
 	ret.add_child("gates", pt);
 	return ret;
 }
+
+std::string Circuit::GetJson2(int base_indent)
+{
+#define SPACING(x) std::string( (base_indent+x)*2, ' ')
+
+	std::stringstream ss(""); 
+	ss << SPACING(0) << "\"circuit\": {\n"; 
+	int count = 0;
+	for (auto& [k, v] : m_gates)
+	{
+		ss << SPACING(1) <<"{\n";
+		ss << SPACING(2) << "\"id\": \"" << v.GetName() <<"\",\n";
+		ss << SPACING(2) << "\"table\": \"" << v.GetTableName() << "\",\n";
+		ss << SPACING(2) << "\"type\": \"" << v.GetTypeName() << "\",\n";
+		ss << SPACING(2) << "\"probed\": \"" << (v.IsProbed()?"true":"false") << "\",\n";
+		
+		ss << SPACING(2) << "\"inputs\": ";
+		std::map<int, Gate*> mg = v.GetInGates();
+		if (mg.size() > 0)
+		{
+			ss << "[\n";
+			for (auto& [k, v] : mg)
+			{
+				ss << SPACING(3) << "  \"" << v->GetName() << "\"\n";
+			}
+			ss << SPACING(2) << "]\n";
+		}
+		else
+			ss << "\"\"\n";
+
+		ss << SPACING(2) << "\"outputs\": ";
+		std::vector<Gate*> vg = v.GetOutGates();
+		if (vg.size() > 0)
+		{
+			ss << "[\n";
+			for (auto g : vg)
+			{
+				ss << SPACING(3) << "  \"" << g->GetName() << "\"\n";
+			}
+			ss << SPACING(2) << "]\n";
+		}
+		else
+			ss << "\"\"\n";
+
+		if(++count<m_gates.size()) 
+			ss << SPACING(1) << "},\n";
+		else
+			ss << SPACING(1) << "}\n";
+	}
+
+	ss << SPACING(1) << "]\n"; // close "gates"
+	ss << SPACING(0) << "},\n"; // close "circuit".
+	return ss.str();
+}

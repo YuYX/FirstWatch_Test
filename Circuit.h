@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <sstream>
 #include <boost/property_tree/ptree.hpp>
 #include "TruthTable.h"
 #include "GateType.h"
@@ -17,6 +18,7 @@ public:
 	Gate* GetGate(std::string gateName) { return &(m_gates[gateName]); }
 	std::vector<Gate*> ProbeAllGates();
 	boost::property_tree::ptree GetJson();
+	std::string GetJson2(int base_indent);
 private:
 	std::map<std::string, TruthTable> m_truthTables;
 	std::map<std::string, GateType> m_gateTypes;

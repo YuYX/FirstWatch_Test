@@ -44,8 +44,15 @@ int main(int argc, char** argv)
     // Processing only JSON file, same as if(json)
     if (argc >= 3 && "json" == std::string(argv[2]))
     {
-        start = std::chrono::steady_clock::now();
-        boost::property_tree::ptree simResult = simulation->GetJson();
+        start = std::chrono::steady_clock::now(); 
+
+        std::string js = simulation->GetJson2(1);
+        std::ofstream output("circuit.jsonp", std::ios::out);
+        output << "onJsonp({\n";
+        output << js;
+        output << ");\n";
+
+       /* boost::property_tree::ptree simResult = simulation->GetJson();
         end = std::chrono::steady_clock::now();
         std::cout << "[GetJSON] " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms\n";
 
@@ -53,7 +60,8 @@ int main(int argc, char** argv)
         std::ofstream output("circuit.jsonp", std::ios::out);
         output << "onJsonp(";
         boost::property_tree::write_json(output, simResult);
-        output << ");\n";
+        output << ");\n";*/
+
         end = std::chrono::steady_clock::now();
         std::cout << "[WriteJSON] " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms\n";
 

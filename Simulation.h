@@ -6,7 +6,7 @@
 #include <chrono>	  
 
 #include "PriorityQueue.h"
-#include "Circuit.h"
+#include "Circuit.h" 
 
 struct Transition
 {
@@ -38,10 +38,11 @@ struct Probe
 			return newValue < other.newValue;
 		return time < other.time;
 	}
-	boost::property_tree::ptree GetJson();
+	boost::property_tree::ptree GetJson(); 
+	std::string GetJson2(int base_indent);
 	int time{};
 	std::string gateName;
-	int newValue{};
+	int newValue{}; 
 };
 
 class Simulation
@@ -58,18 +59,19 @@ public:
 	void Run();
 	void ProbeAllGates() { m_undoLog = m_circuit->ProbeAllGates(); }
 	void UndoProbeAllGates();
-	boost::property_tree::ptree GetJson();
+	boost::property_tree::ptree GetJson(); 
+	std::string GetJson2(int base_indent);
 	void PrintProbes(std::ostream& os); 
 private:   
 	std::unique_ptr<Circuit> m_circuit;
 	std::string m_layout;
-	std::vector<Transition> m_inTransitions;
-	//PriorityQueue<Transition> m_queue;
+	std::vector<Transition> m_inTransitions; 
 	PriorityQueue2<std::pair<int,int>, Transition> m_queue;
 	std::vector<Probe> m_probes;
-	std::vector<Gate*> m_undoLog;  
-	
-	std::ofstream logFile;
+	std::vector<Gate*> m_undoLog;    
+
+	//YYX for simply debugging
+	std::ofstream logFile; 
 	std::chrono::microseconds::rep duration0{};
 	std::chrono::microseconds::rep duration{};
 	std::chrono::microseconds::rep duration2{};
