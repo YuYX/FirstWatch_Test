@@ -1,7 +1,8 @@
 #include <stdexcept>
 #include "TruthTable.h"
 
-
+// Bear in mind the size of m_table can be either 2 or 4
+//   
 int TruthTable::GetOutput(std::vector<int> inputs) const
 {
 	if (m_inputCount == 1)

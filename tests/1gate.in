@@ -1,5 +1,7 @@
 # Circuit: tables
+# table of 'eq'
 table eq 0 1
+# table of 'xor2'
 table xor2 0 1 1 0
 
 # Circuit: types

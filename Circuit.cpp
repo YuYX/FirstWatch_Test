@@ -42,6 +42,30 @@ Args:
 		to this gate's inputs.
 
 */
+// How to make sure all the gates with a name included in the inputNames 
+// are already added to the m_gates?
+/* 
+     m_gates
+	    |------> 'a'->GateObj_a(in)
+		|------> 'b'->GateObj_b(in)
+		|
+		| To Process line of 'gate axb xor2 a b'
+		| 
+		|processing 'gate axb xor2'
+		|------> 'axb'->GateObj_axb(xor2) with m_inGates Empty.
+		                |
+		                | processing 'a' of 'gate axb xor2 a'
+                        | GateObj_axb.ConnectInput(0,&GateObj_a)
+					    |--------->GateObj_axb.m_inGates[0] = GateObj_a
+					    |                                     |---->m_outGates[0] = GateObj_axb
+					    |
+					    | processing 'b' of 'gate axb xor2 a b'
+					    | GateObj_axb.ConnectInput(1,&GateObj_b)
+				    	|--------->GateObj_axb.m_inGates[1] = GateObj_b
+					    |                                     |---->m_outGates[0] = GateObj_axb
+ 		
+
+*/
 void Circuit::AddGate(std::string name, std::string typeName, std::vector<std::string> inputNames)
 {
 	if (m_gates.find(name) != m_gates.end())
@@ -55,9 +79,9 @@ void Circuit::AddGate(std::string name, std::string typeName, std::vector<std::s
 		gate.ConnectInput(i, &target);
 	}
 }
-
+ 
 void Circuit::AddProbe(std::string gateName)
-{
+{ 
 	auto gate = m_gates[gateName];
 	gate.Probe();
 }
@@ -78,6 +102,7 @@ std::vector<Gate*> Circuit::ProbeAllGates()
 boost::property_tree::ptree Circuit::GetJson()
 {
 	boost::property_tree::ptree pt;
+
 	for (auto& [k, v] : m_gates)
 	{
 		pt.push_back(std::make_pair("", v.GetJson()));

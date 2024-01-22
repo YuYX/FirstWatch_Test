@@ -57,12 +57,3 @@ contents of a SVG file with the circuit layout.
 
 Keep in mind that is the layout information is optional. Don't bother generating
 it if you don't plan to use TRACE=jsonp to generate a visualization.
-
-To add layout information to your own test case, follow these steps:
-0) Install graphviz.
-    sudo apt-get install graphviz
-1) Get an automatically generated layout
-    ruby layout.rb < tests/1gate.in > tests/1gate.svg
-2) Tweak the layout in a SVG editor (e.g., Inkscape).
-3) Inject the layout in the test case
-    ruby layout.rb tests/1gate.in < tests/1gate.svg

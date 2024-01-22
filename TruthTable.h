@@ -8,6 +8,11 @@ class TruthTable
 {
 public:
     TruthTable() {}
+
+    // size of initializing outputs   vs m_inputCount
+    // 2                            -> 1
+    // 4                            -> 2 
+    // other                        -> Throwing Error: Unsupported size.
     TruthTable(std::string name, std::vector<int> outputs) : m_name(name), m_table(outputs)
     {
         if (outputs.size() != 2 && outputs.size() != 4)
@@ -17,7 +22,9 @@ public:
         else
             m_inputCount = 2;
     }
+
     int GetOutput(std::vector<int> inputs) const;
+
     std::string GetName() const
     {
         return m_name;
